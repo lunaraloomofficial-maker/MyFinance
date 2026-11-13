@@ -48,7 +48,7 @@ Xcode is not installed (`xcode-select -p` reports `/Library/Developer/CommandLin
 - No live financial data in widgets. Independent optional extension source shows privacy placeholders and app deep links; no App Group is required or configured.
 - Restore is validated replacement, not merge. The user previews and confirms before replacement; retained UUIDs prevent repeated-restore duplication.
 - No backend, tracker, external AI API, paid dependency, signing configuration or installation work. The initial phase deferred cloud builds; the later user request authorized the GitHub Actions workflow and unsigned IPA packaging described below.
-- The repository has no configured GitHub remote. Changes are saved locally rather than published to an unknown repository.
+- Source and workflow are published at https://github.com/lunaraloomofficial-maker/MyFinance after user authorization. The first cloud run is https://github.com/lunaraloomofficial-maker/MyFinance/actions/runs/43492060320; native compilation is pending its result.
 
 ## Cloud-build follow-up
 

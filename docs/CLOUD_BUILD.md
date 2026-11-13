@@ -1,6 +1,6 @@
 # Build MyFinance online without installing Xcode locally
 
-The included workflow is `.github/workflows/build-ios.yml`, named **Build unsigned iPhone IPA**. It uses Apple's tools installed on a GitHub-hosted `macos-15` runner. Your Mac does not need Xcode, and this workflow uses no Apple Account, paid developer membership, signing certificate or secrets.
+The included workflow is `.github/workflows/build-ios.yml`, named **Build unsigned iPhone IPA**. It uses Apple's tools installed on a GitHub-hosted `macos-15-intel` runner. Your Mac does not need Xcode, and this workflow uses no Apple Account, paid developer membership, signing certificate or secrets.
 
 Standard GitHub-hosted runners are free for public repositories under GitHub's current policy. Private repositories use the account's included allowance and applicable billing. See [GitHub runner documentation](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). The workflow has a 35-minute timeout, cancels superseded runs on the same ref, and keeps artifacts for seven days.
 
