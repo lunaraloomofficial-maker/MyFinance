@@ -41,7 +41,8 @@ MyFinance/
 MyFinanceWidgets/           Independent optional widget target
 MyFinanceTests/Core/        Finance, parser, encryption and CSV tests
 MyFinanceTests/iOS/         SwiftData persistence tests (requires Xcode)
-scripts/                    Dependency-free generation and local checks
+.github/workflows/          Hosted macOS tests and unsigned IPA build
+scripts/                    Project generation, checks and IPA packaging
 docs/                       Architecture, fixtures and validation report
 ```
 
@@ -77,7 +78,11 @@ xcodebuild -project MyFinance.xcodeproj -scheme MyFinance \
   -destination 'platform=iOS Simulator,name=iPhone 16' test CODE_SIGNING_ALLOWED=NO
 ```
 
-Bundle IDs use `com.example.MyFinance`; change them before a future device release. The core app needs no App Groups, iCloud or paid capabilities. Personal-team provisioning and optional extension capabilities must be checked later; this repository does not configure signing, IPA generation, GitHub Actions, Sideloadly or device installation.
+Bundle IDs use `com.example.MyFinance`; change them before a future device release. The core app needs no App Groups, iCloud or paid capabilities. Personal-team provisioning and optional extension capabilities must be checked later.
+
+## Build online without local Xcode
+
+The included [GitHub Actions workflow](.github/workflows/build-ios.yml) runs tests on a hosted Mac and builds an **unsigned native iPhone IPA** without Apple credentials. After publishing this repository, open **Actions → Build unsigned iPhone IPA → Run workflow**. On success, download the IPA artifact and extract its ZIP. The package still needs signing before installation. See the [cloud build guide](docs/CLOUD_BUILD.md) for publishing, artifact downloads, limits and troubleshooting. The workflow has been prepared locally; a successful cloud build is not yet verified.
 
 ## First use
 

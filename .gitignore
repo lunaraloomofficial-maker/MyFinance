@@ -3,3 +3,15 @@ DerivedData/
 *.xcuserstate
 xcuserdata/
 .DS_Store
+
+# Generated builds and personal exports
+__pycache__/
+*.pyc
+artifacts/
+*.ipa
+*.xcarchive/
+*.xcresult/
+*.mfbackup
+*.csv
+.env
+.env.*

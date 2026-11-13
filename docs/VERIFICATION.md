@@ -47,5 +47,11 @@ Xcode is not installed (`xcode-select -p` reports `/Library/Developer/CommandLin
 - No verified official bank templates. All fixtures are fictional, with a protocol for future strategies.
 - No live financial data in widgets. Independent optional extension source shows privacy placeholders and app deep links; no App Group is required or configured.
 - Restore is validated replacement, not merge. The user previews and confirms before replacement; retained UUIDs prevent repeated-restore duplication.
-- No backend, tracker, external AI API, paid dependency, signing configuration, IPA generation, GitHub Actions, Sideloadly or installation work.
+- No backend, tracker, external AI API, paid dependency, signing configuration or installation work. The initial phase deferred cloud builds; the later user request authorized the GitHub Actions workflow and unsigned IPA packaging described below.
 - The repository has no configured GitHub remote. Changes are saved locally rather than published to an unknown repository.
+
+## Cloud-build follow-up
+
+Added `.github/workflows/build-ios.yml` and `scripts/package-ipa.py` following the user's request to build online. It gates an unsigned device build on core and native simulator tests, packages a standard Payload directory, and uploads the IPA/checksum plus diagnostics. It requires no Apple signing secrets.
+
+Locally executed all six packaging-input validation tests successfully (device metadata, simulator rejection, missing/nonexecutable binary, invalid executable path, signed input and non-app input). Parsed workflow YAML with Ruby Psych and shell snippets with Bash; actionlint validated workflow expressions, contexts and shell scripts. Native cloud execution and a real IPA remain unverified until an authorized GitHub repository is available and a workflow run succeeds.
