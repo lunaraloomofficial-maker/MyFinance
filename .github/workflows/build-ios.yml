@@ -2,6 +2,15 @@ name: Build unsigned iPhone IPA
 
 on:
   workflow_dispatch:
+    inputs:
+      runner:
+        description: Standard macOS runner pool
+        type: choice
+        default: macos-26
+        options:
+          - macos-26
+          - macos-15-intel
+          - macos-15
   push:
     branches: [main]
     paths:
@@ -30,7 +39,7 @@ concurrency:
 jobs:
   build:
     name: Test and build MyFinance
-    runs-on: macos-15-intel
+    runs-on: ${{ inputs.runner || 'macos-26' }}
     timeout-minutes: 35
     defaults:
       run:

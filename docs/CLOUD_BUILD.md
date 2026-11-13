@@ -1,6 +1,6 @@
 # Build MyFinance online without installing Xcode locally
 
-The included workflow is `.github/workflows/build-ios.yml`, named **Build unsigned iPhone IPA**. It uses Apple's tools installed on a GitHub-hosted `macos-15-intel` runner. Your Mac does not need Xcode, and this workflow uses no Apple Account, paid developer membership, signing certificate or secrets.
+The included workflow is `.github/workflows/build-ios.yml`, named **Build unsigned iPhone IPA**. It uses Apple's tools installed on a GitHub-hosted `macos-26` runner by default (manual runs can select another standard pool). Your Mac does not need Xcode, and this workflow uses no Apple Account, paid developer membership, signing certificate or secrets.
 
 Standard GitHub-hosted runners are free for public repositories under GitHub's current policy. Private repositories use the account's included allowance and applicable billing. See [GitHub runner documentation](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). The workflow has a 35-minute timeout, cancels superseded runs on the same ref, and keeps artifacts for seven days.
 
@@ -58,3 +58,5 @@ If the workflow fails, no successful native build should be claimed. Open the re
 For a packaging error, confirm that the input is `Release-iphoneos/MyFinance.app`, that `CFBundleSupportedPlatforms` identifies iPhoneOS, and that the executable exists, is executable and contains arm64. Simulator `.app` bundles cannot be converted into iPhone apps by renaming or zipping them.
 
 The packaging validation tests use explicitly fake metadata fixtures and do not claim an app compiled. Full `ditto` packaging and Mach-O checks require the actual cloud-built device app.
+
+If a run has zero steps and no runner name, the build has not started. Standard macOS pools can have capacity delays. Manual dispatch includes a runner selector for macos-26, macos-15-intel or macos-15; changing pools is not a source-code fix. See https://github.com/actions/runner/issues/4833 for a matching upstream scheduling report.
