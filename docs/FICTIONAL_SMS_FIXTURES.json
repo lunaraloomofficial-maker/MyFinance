@@ -1,0 +1,7 @@
+[
+  {"sender":"HNB", "text":"HNB XX1234 debited LKR 1,250.00 at Fictional Cafe on 2026-11-01 09:30 ref DEMO001. Available balance LKR 8,000.00", "expected":"high"},
+  {"sender":"Unknown", "text":"Your account XXXX5678 credited Rs. 25,000 from Fictional Employer on 01/11/2026", "expected":"medium"},
+  {"sender":"Unknown", "text":"Transfer LKR 500 to Fictional Wallet", "expected":"low"},
+  {"sender":"Unknown", "text":"OTP 000000 for purchase LKR 500. Never share your code.", "expected":"invalid"},
+  {"sender":"Unknown", "text":"Available balance LKR 10,000.00", "expected":"invalid"}
+]

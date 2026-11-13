@@ -1,0 +1,75 @@
+name: MyFinance
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: '17.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    IPHONEOS_DEPLOYMENT_TARGET: '17.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  MyFinance:
+    type: application
+    platform: iOS
+    sources:
+      - path: MyFinance
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MyFinance
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: MyFinance/Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        CURRENT_PROJECT_VERSION: '1'
+        MARKETING_VERSION: '1.0'
+  MyFinanceTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: MyFinanceTests/iOS
+    dependencies:
+      - target: MyFinance
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MyFinanceTests
+        GENERATE_INFOPLIST_FILE: YES
+  MyFinanceCoreTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: MyFinanceTests/Core
+      - path: MyFinance/Core/Finance
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MyFinanceCoreTests
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: '$(inherited) CORE_INTEGRATED_TESTS'
+  MyFinanceWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: MyFinanceWidgets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MyFinance.widgets
+        INFOPLIST_FILE: MyFinanceWidgets/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+schemes:
+  MyFinance:
+    build:
+      targets:
+        MyFinance: all
+        MyFinanceTests: [test]
+        MyFinanceCoreTests: [test]
+    test:
+      targets:
+        - MyFinanceTests
+        - MyFinanceCoreTests
+  MyFinanceWidgets:
+    build:
+      targets:
+        MyFinanceWidgets: all
