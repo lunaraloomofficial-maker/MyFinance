@@ -14,6 +14,7 @@ struct SMSImportView: View {
     @State private var discarding: ImportValue?
     var body: some View {
         List {
+            Section { ShortcutConnectionCard() }
             Section {
                 Text("Import an individual bank notification. MyFinance cannot read your SMS inbox. Message text is parsed on your device and is not retained; only extracted fields are saved.").font(.footnote).foregroundStyle(.secondary)
                 TextEditor(text: $text).frame(minHeight: 130).accessibilityLabel("Bank SMS text")
@@ -42,21 +43,9 @@ struct SMSImportView: View {
         do { message = try await store.importText(text, sender: sender, date: received, source: importSource); text = "" } catch { message = error.localizedDescription; if (error as? FinanceError) != nil { text = "" } }
     }
 }
-struct ShortcutsGuide: View {
-    var body: some View { List {
-        Section("Import Bank SMS") { Text("The app supplies an App Intent named Import Bank SMS. It accepts message text, an optional sender, and an optional received timestamp. It does not grant inbox access.") }
-        Section("Personal Message automation") {
-            Text("1. Open Apple Shortcuts → Automation → New Automation → Message.")
-            Text("2. Choose your bank sender or a message condition. Choose the run behavior offered by your iOS version.")
-            Text("3. Add MyFinance → Import Bank SMS. Use the incoming message content as SMS text. Supply the sender and date if available.")
-            Text("4. Test with a fictional message. Open MyFinance → SMS import and confirm the result.")
-        }
-        Section("Control & privacy") { Text("Message trigger fields and unattended execution depend on your iOS version and device settings. Some automations require confirmation. Manual paste is always available."); Text("Automatic saving is off by default. Only high-confidence LKR messages matching exactly one account may auto-save. With app lock enabled, all imports are queued for review.") }
-        Section("Fictional test message") { Text("HNB XX1234 debited LKR 1,250.00 at Fictional Cafe on 2026-11-01 09:30 ref DEMO001. Available balance LKR 8,000.00").textSelection(.enabled); Text("This is invented test data, not a verified bank template.").font(.caption) }
-    }.navigationTitle("Shortcuts setup") }
-}
 struct ImportTroubleshooting: View {
     var body: some View { List {
+        Section("Shortcut action missing?") { Text("Open MyFinance after installing an update, then use Open in Shortcuts from the SMS import screen. The button refreshes MyFinance’s action and opens its own page. Apple Shortcuts must be installed. With a sideloaded app, action discovery still needs checking on the actual phone.") }
         Section("Nothing imported?") { Text("Verify that your automation passes the message body, not only the sender. Run it manually first. iOS does not provide unrestricted background SMS access.") }
         Section("Needs review?") { Text("Unknown senders, missing dates, unmatched accounts, transfers and ambiguous amounts require confirmation. Add the last four account digits and correct institution to help account matching.") }
         Section("Rejected message?") { Text("OTP/security text, marketing, balance-only alerts, unsupported currencies and messages without a transaction amount are rejected. Create a manual transaction when a format is unsupported.") }

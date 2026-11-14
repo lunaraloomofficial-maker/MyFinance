@@ -23,9 +23,9 @@ struct SettingsView: View {
                 Text("Uses Face ID, Touch ID or your device passcode. If immediate locking is off, the app still locks when it enters the background. Recent app previews are covered.").font(.caption).foregroundStyle(.secondary)
                 Text("Offline by default. No accounts, trackers, advertisements or bank credentials. Device data protection protects the local database; app lock controls access through this app.").font(.footnote)
             }
-            Section("SMS preferences") { settingsToggle("Auto-save high-confidence imports", keyPath: \.autoImportPreference); Text("Requires an unambiguous account, date and reference. All imports require review while app lock is enabled.").font(.caption); NavigationLink("Shortcuts setup") { ShortcutsGuide() }; NavigationLink("Troubleshooting") { ImportTroubleshooting() } }
+            Section("SMS preferences") { OpenFinanceShortcutsButton(); settingsToggle("Auto-save high-confidence imports", keyPath: \.autoImportPreference); Text("Requires an unambiguous account, date and reference. All imports require review while app lock is enabled.").font(.caption); NavigationLink("Shortcuts setup") { ShortcutsGuide() }; NavigationLink("Troubleshooting") { ImportTroubleshooting() } }
             Section("Your data") { NavigationLink("Encrypted backup & restore") { BackupView() }; NavigationLink("Export transactions") { TransactionsView() }; NavigationLink("Widget privacy & availability") { WidgetHelpView() } }
-            Section("MyFinance") { Text("Built for clarity. Designed for privacy.").foregroundStyle(Brand.green); Text("Version 1.0 · Local storage only").font(.caption) }
+            Section("MyFinance") { Text("Built for clarity. Designed for privacy.").foregroundStyle(Brand.green); Text("Version 1.1 · Local storage only").font(.caption) }
         }.navigationTitle("Settings")
     }
     private func settingsToggle(_ title: String, keyPath: WritableKeyPath<SettingsValue, Bool>) -> some View { Toggle(title, isOn: Binding(get: { store.data.settings[keyPath: keyPath] }, set: { value in store.perform { try store.updateSettings { $0[keyPath: keyPath] = value } } })) }

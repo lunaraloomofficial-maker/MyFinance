@@ -5,9 +5,9 @@ struct ImportBankSMSIntent: AppIntent {
     static var title: LocalizedStringResource = "Import Bank SMS"
     static var description = IntentDescription("Parse a bank notification locally and import it or add it to your review queue.")
     static var openAppWhenRun = false
-    @Parameter(title: "SMS text") var smsText: String
-    @Parameter(title: "Sender") var sender: String?
-    @Parameter(title: "Received timestamp") var receivedTimestamp: Date?
+    @Parameter(title: "SMS text", description: "The message content supplied by your Message automation.", inputConnectionBehavior: .connectToPreviousIntentResult) var smsText: String
+    @Parameter(title: "Sender", inputConnectionBehavior: .never) var sender: String?
+    @Parameter(title: "Received timestamp", inputConnectionBehavior: .never) var receivedTimestamp: Date?
     static var parameterSummary: some ParameterSummary { Summary("Import \(\.$smsText)") { \.$sender; \.$receivedTimestamp } }
     @MainActor func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = try FinanceStore(container: FinanceStore.makeContainer())

@@ -115,6 +115,15 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             2>&1 | tee "$OUTPUT_DIR/simulator-tests.log"
 
+      - name: Capture Shortcuts connection screen
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          xcrun simctl launch "$IPHONE_SIMULATOR" com.example.MyFinance
+          xcrun simctl openurl "$IPHONE_SIMULATOR" 'myfinance://shortcuts'
+          sleep 3
+          xcrun simctl io "$IPHONE_SIMULATOR" screenshot "$OUTPUT_DIR/shortcuts-setup.png"
+
       - name: Build unsigned iPhone app
         run: |
           set -euo pipefail
@@ -156,6 +165,7 @@ jobs:
           name: MyFinance-build-diagnostics-${{ github.run_number }}
           path: |
             ${{ runner.temp }}/MyFinanceArtifacts/*.log
+            ${{ runner.temp }}/MyFinanceArtifacts/*.png
             ${{ runner.temp }}/MyFinanceTests.xcresult
           if-no-files-found: ignore
           retention-days: 7

@@ -11,7 +11,7 @@ The source implementation and Xcode project are present. The app has **compiled 
 - Accounts: create/edit/archive/reactivate, institutions as labels, masked identifiers, credit-card liability accounting, linked debit cards, transaction history/search, opening balances, reconciliation and adjustments.
 - Transactions: all seven types; create/edit/detail/delete, atomic paired transfers and card repayments, notes, category corrections, merchant-rule learning, search/date/account/category/type/source/status/amount filters and sorting.
 - Local generic SMS parser; high/medium/low confidence, security and promotional rejection, account matching, duplicate detection, review/edit/discard queue, manual paste and user-selected text-file import.
-- Import Bank SMS App Intent with text/sender/timestamp, optional high-confidence saving, setup guide and troubleshooting. No SMS inbox access.
+- Import Bank SMS App Intent with text/sender/timestamp and automatic upstream-input connection, optional high-confidence saving, and troubleshooting. A native Open in Shortcuts button opens MyFinance’s ready-made action; a guided setup screen replaces the old text-only guide. No SMS inbox access.
 - Categories and merchant rules: create/edit, icons/colors, archive categories, priorities, enable/disable/delete rules.
 - Monthly total/category budgets, custom warning thresholds, previous-month spending, remaining/over-budget display and real transaction calculations.
 - Analytics: period/custom date selection, daily/category/monthly charts, merchant/account/income-source breakdown, budget vs actual, savings rate and CSV exports.
@@ -96,7 +96,7 @@ The included [GitHub Actions workflow](.github/workflows/build-ios.yml) runs tes
 
 ## Shortcuts and privacy
 
-The in-app SMS import screen links to setup and troubleshooting guides. In Apple Shortcuts, create a Message personal automation for your bank sender/condition; pass the message body into **MyFinance → Import Bank SMS**. Sender and received timestamp are optional inputs. Test the automation manually first. Trigger fields and automatic execution vary by iOS version; some configurations require confirmation. Manual paste and plain-text import remain supported.
+In version 1.1, SMS Import and Settings include Apple’s native **Open in Shortcuts** button. The app registers its ready-made Import Bank SMS action at launch and refreshes it when you open the Shortcuts page. The setup screen shows account readiness and lets you choose auto-saving directly. See [Shortcuts setup](docs/SHORTCUTS_SETUP.md). In Apple Shortcuts, create a Message personal automation for your bank sender/condition; pass the message body into **MyFinance → Import Bank SMS**. Sender and received timestamp are optional inputs. Test the automation manually first. Trigger fields and automatic execution vary by iOS version; some configurations require confirmation. Manual paste and plain-text import remain supported.
 
 Only high-confidence LKR messages matching exactly one account may auto-save when explicitly enabled. App lock forces all imports into review. OTP and verification messages are rejected; message bodies are never persisted or uploaded. Bank-specific official templates are not invented: fixtures are fictional generic examples.
 

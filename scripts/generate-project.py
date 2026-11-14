@@ -43,7 +43,7 @@ for name in product_refs:
         build = add('build:'+name+':'+p, isa='PBXBuildFile', fileRef=file_refs[p])
         (sources if p.endswith('.swift') else resources).append(build)
     phases=[add('sources:'+name,isa='PBXSourcesBuildPhase',buildActionMask='2147483647',files=sources,runOnlyForDeploymentPostprocessing='0'), add('frameworks:'+name,isa='PBXFrameworksBuildPhase',buildActionMask='2147483647',files=[],runOnlyForDeploymentPostprocessing='0'),add('resources:'+name,isa='PBXResourcesBuildPhase',buildActionMask='2147483647',files=resources,runOnlyForDeploymentPostprocessing='0')]
-    settings=dict(base,PRODUCT_BUNDLE_IDENTIFIER='com.example.'+name,LD_RUNPATH_SEARCH_PATHS=['$(inherited)','@executable_path/Frameworks'],CURRENT_PROJECT_VERSION='1',MARKETING_VERSION='1.0')
+    settings=dict(base,PRODUCT_BUNDLE_IDENTIFIER='com.example.'+name,LD_RUNPATH_SEARCH_PATHS=['$(inherited)','@executable_path/Frameworks'],CURRENT_PROJECT_VERSION='2',MARKETING_VERSION='1.1')
     deps=[]
     if is_test:
         settings['GENERATE_INFOPLIST_FILE']='YES'
