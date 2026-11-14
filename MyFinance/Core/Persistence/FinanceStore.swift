@@ -11,6 +11,9 @@ import Observation
     private static var sharedContainer: ModelContainer?
     static func makeContainer(memory: Bool = false) throws -> ModelContainer {
         if !memory, let sharedContainer { return sharedContainer }
+        if !memory {
+            _ = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        }
         let schema = Schema(versionedSchema: FinanceSchemaV1.self)
         let configuration = ModelConfiguration("MyFinance", schema: schema, isStoredInMemoryOnly: memory, cloudKitDatabase: .none)
         let result = try ModelContainer(for: schema, migrationPlan: FinanceMigrations.self, configurations: [configuration])

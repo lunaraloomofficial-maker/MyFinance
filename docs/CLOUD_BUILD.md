@@ -1,6 +1,6 @@
 # Build MyFinance online without installing Xcode locally
 
-The included workflow is `.github/workflows/build-ios.yml`, named **Build unsigned iPhone IPA**. It uses Apple's tools installed on a GitHub-hosted `macos-26` runner by default (manual runs can select another standard pool). Your Mac does not need Xcode, and this workflow uses no Apple Account, paid developer membership, signing certificate or secrets.
+The included workflow is `.github/workflows/build-ios.yml`, named **Build unsigned iPhone IPA**. It uses Apple's tools installed on a GitHub-hosted `macos-15-intel` runner by default (manual runs can select another standard pool). Your Mac does not need Xcode, and this workflow uses no Apple Account, paid developer membership, signing certificate or secrets.
 
 Standard GitHub-hosted runners are free for public repositories under GitHub's current policy. Private repositories use the account's included allowance and applicable billing. See [GitHub runner documentation](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). The workflow has a 35-minute timeout, cancels superseded runs on the same ref, and keeps artifacts for seven days.
 
@@ -29,7 +29,7 @@ The first push to `main` that includes the workflow triggers the build automatic
 The workflow:
 
 1. Shows Xcode, Swift and iPhone SDK versions, and validates source/project references.
-2. Runs the core XCTest suite with `swift test` and six IPA-input validation tests.
+2. Runs the core XCTest suite with `swift test` and seven IPA validation/packaging tests.
 3. Selects an available iPhone simulator from the runner image and runs the native core/SwiftData suites with `xcodebuild test`.
 4. Builds the main app for **generic/platform=iOS**, Release configuration, with code signing disabled.
 5. Validates device metadata and an arm64 executable, then packages `Payload/MyFinance.app` into `MyFinance-unsigned.ipa` using `ditto`.

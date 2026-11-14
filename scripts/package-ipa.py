@@ -35,7 +35,7 @@ def package(app, output):
         raise ValueError('Output must have the .ipa extension.')
     if app == output or app in output.parents:
         raise ValueError('Write the IPA outside the .app directory.')
-    subprocess.run(['xcrun', 'lipo', '-verify_arch', 'arm64', str(binary)], check=True)
+    subprocess.run(['xcrun', 'lipo', str(binary), '-verify_arch', 'arm64'], check=True)
     output.parent.mkdir(parents=True, exist_ok=True)
     # Stage on the same volume, validate, then replace output atomically.
     with tempfile.TemporaryDirectory(prefix='myfinance-ipa-', dir=output.parent) as temporary:

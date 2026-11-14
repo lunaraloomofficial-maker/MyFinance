@@ -3,6 +3,10 @@
 import importlib.util
 import pathlib
 import plistlib
+import shutil
+import subprocess
+import sys
+import zipfile
 import tempfile
 import unittest
 
@@ -53,6 +57,22 @@ class DevicePackageValidationTests(unittest.TestCase):
         (self.app / 'embedded.mobileprovision').write_text('fixture')
         with self.assertRaisesRegex(ValueError, 'unsigned'):
             module.validate_app(self.app)
+
+    @unittest.skipUnless(sys.platform == 'darwin' and shutil.which('xcrun'), 'Apple tools required')
+    def test_real_lipo_and_ditto_archive_pipeline(self):
+        # This is a macOS Mach-O fixture, NOT a compiled iOS application.
+        # It exercises the actual Apple CLI syntax, ZIP layout and permission preservation.
+        subprocess.run(['xcrun', 'clang', '-arch', 'arm64', '-x', 'c', '-', '-o',
+                        str(self.app / 'MyFinance')], input='int main(void) { return 0; }',
+                       text=True, check=True)
+        output = self.app.parent / 'fixture.ipa'
+        module.package(self.app, output)
+        with zipfile.ZipFile(output) as archive:
+            self.assertIsNone(archive.testzip())
+            binary = archive.getinfo('Payload/MyFinance.app/MyFinance')
+            self.assertTrue((binary.external_attr >> 16) & 0o111)
+            self.assertIn('Payload/MyFinance.app/Info.plist', archive.namelist())
+        self.assertFalse(any(path.name.startswith('myfinance-ipa-') for path in output.parent.iterdir()))
 
     def test_non_app_input_is_rejected(self):
         with self.assertRaises(ValueError):
