@@ -2,7 +2,7 @@
 
 A native, offline personal finance tracker for iPhone, built with SwiftUI, SwiftData, Swift Charts, App Intents and LocalAuthentication. Minimum iOS 17. Currency: LKR. No login, backend, paid service or runtime third-party dependency.
 
-The source implementation and Xcode project are present. The iOS app has **not been compiled or run** in this environment: Xcode, iOS SDKs, SwiftData macro plugins and XCTest are unavailable. See [verification](docs/VERIFICATION.md) for what actually ran and what remains to check.
+The source implementation and Xcode project are present. The app has **compiled successfully on a GitHub-hosted Mac with Xcode 16.4**, and all **22 simulator tests passed**. Local Xcode is not installed. The corrected cloud workflow also produced an unsigned arm64 IPA, downloaded and checksum-verified locally. Physical iPhone behavior remains untested. See [verification](docs/VERIFICATION.md) for evidence and remaining checks.
 
 ## Implemented source
 
@@ -82,7 +82,7 @@ Bundle IDs use `com.example.MyFinance`; change them before a future device relea
 
 ## Build online without local Xcode
 
-The included [GitHub Actions workflow](.github/workflows/build-ios.yml) runs tests on a hosted Mac and builds an **unsigned native iPhone IPA** without Apple credentials. After publishing this repository, open **Actions → Build unsigned iPhone IPA → Run workflow**. On success, download the IPA artifact and extract its ZIP. The package still needs signing before installation. See the [cloud build guide](docs/CLOUD_BUILD.md) for publishing, artifact downloads, limits and troubleshooting. The workflow has been prepared locally; a successful cloud build is not yet verified.
+The included [GitHub Actions workflow](.github/workflows/build-ios.yml) runs tests on a hosted Mac and builds an **unsigned native iPhone IPA** without Apple credentials. After publishing this repository, open **Actions → Build unsigned iPhone IPA → Run workflow**. On success, download the IPA artifact and extract its ZIP. The package still needs signing before installation. See the [cloud build guide](docs/CLOUD_BUILD.md) for publishing, artifact downloads, limits and troubleshooting. The [corrected cloud run](https://github.com/lunaraloomofficial-maker/MyFinance/actions/runs/43533704610) passed tests, built the device app and uploaded the unsigned IPA. For installation, see the [iPhone guide](docs/INSTALL_IPHONE.md).
 
 ## First use
 
@@ -104,7 +104,7 @@ All records stay in the local app container by default. System backups may follo
 
 ## Known limitations and next validation
 
-- Native compilation, SwiftData macro expansion, simulator/UI tests, Face ID/passcode behavior, background cover timing and App Intent registration/execution require Xcode/device verification.
+- Native compilation, SwiftData macro expansion and 22 automated simulator tests passed in Xcode 16.4. Visual UI checks, Face ID/passcode behavior, background cover timing and App Intent registration/execution still require device verification.
 - Widgets are a separate optional target, not embedded. They always hide values. Live financial snapshots require future App Group provisioning and privacy-aware shared persistence; no such capability is promised here.
 - Text sharing is through user-selected text files/paste, not an iOS share extension. Arbitrary access to Messages is unsupported.
 - Restore replaces all records, after preview/confirmation; it does not merge backups. Backup validation preserves IDs and rejects duplicates/broken transfers.

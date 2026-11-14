@@ -28,12 +28,12 @@ python3 scripts/run-core-tests.py
 
 A native SwiftData typecheck was attempted against the macOS SDK. The installation lacks the `SwiftDataMacros` compiler plugin, so model expansion could not run. Syntax validation succeeded; it is not a substitute for macro expansion or a native build.
 
-Xcode is not installed (`xcode-select -p` reports `/Library/Developer/CommandLineTools`). No iOS SDK/simulator build, native test result, successful launch or phone integration is claimed.
+Xcode is not installed (`xcode-select -p` reports `/Library/Developer/CommandLineTools`). That limitation applied to the local-only phase. The later cloud execution described below compiled the app and passed native simulator tests; physical phone integration remains unverified.
 
-## Source provided; execution still required in Xcode
+## Validation boundaries and remaining device checks
 
-- Six SwiftData integration tests: account/transaction CRUD, reload, atomic transfer edit/delete, preservation on invalid writes, repeated restore ID stability, import queue/duplicate/confirmation behavior, and lock-forced review (grouped across six test methods).
-- Full SwiftUI app typecheck and iOS 17 compatibility; SwiftData schema creation/upserts/rollback and persistence across launches; optional extension compilation and target membership in Xcode.
+- Six SwiftData integration tests now passed in the cloud: account/transaction CRUD, reload, atomic transfer edit/delete, preservation on invalid writes, repeated restore ID stability, import queue/duplicate/confirmation behavior, and lock-forced review. They use in-memory stores; on-device SQLite persistence across launches still needs validation.
+- The full SwiftUI app compiled with deployment target iOS 17 using the iOS 18.5 SDK. SwiftData models expanded and the main app/test targets built. Running on actual iOS 17, SQLite persistence across launches, and optional widget-extension compilation remain unverified.
 - Light/dark layout, small iPhone, accessibility text sizes, VoiceOver, chart interactions, keyboard behavior, navigation, sheets, destructive confirmations and ShareLink/fileImporter.
 - Real Face ID/Touch ID/device passcode outcomes, cancelled authentication, unavailable authentication, scene transitions and privacy snapshots.
 - App Intent discovery, Shortcuts parameters and Message personal automation behavior on the user's actual iOS version. Background/file-protection restrictions, lifecycle and potential separate-process execution need testing.
@@ -55,3 +55,17 @@ Xcode is not installed (`xcode-select -p` reports `/Library/Developer/CommandLin
 Added `.github/workflows/build-ios.yml` and `scripts/package-ipa.py` following the user's request to build online. It gates an unsigned device build on core and native simulator tests, packages a standard Payload directory, and uploads the IPA/checksum plus diagnostics. It requires no Apple signing secrets.
 
 Locally executed all six packaging-input validation tests successfully (device metadata, simulator rejection, missing/nonexecutable binary, invalid executable path, signed input and non-app input). Parsed workflow YAML with Ruby Psych and shell snippets with Bash; actionlint validated workflow expressions, contexts and shell scripts. Native cloud execution and a real IPA remain unverified until an authorized GitHub repository is available and a workflow run succeeds.
+
+## First completed native cloud attempt
+
+[Run 43494902259, attempt 1](https://github.com/lunaraloomofficial-maker/MyFinance/actions/runs/43494902259/attempts/1) used Xcode 16.4 and Swift 6.1.2 on a standard Intel Mac. Its 16 macOS core XCTest cases passed. Xcode then reported `TEST SUCCEEDED`: 16 core tests plus six SwiftData tests passed in the iPhone SE (3rd generation) simulator. The Release arm64 device target reported `BUILD SUCCEEDED` with minimum deployment iOS 17.
+
+The final packaging step failed because the architecture-check CLI put the executable after the `-verify_arch` architecture list. This has been corrected to `lipo <binary> -verify_arch arm64`. A seventh local integration test now compiles an explicitly macOS-only Mach-O fixture and exercises actual lipo/ditto ZIP packaging, including file layout and executable permission preservation. This fixture is not an iOS app or proof of a device build. All seven packaging tests pass.
+
+The simulator startup logged a missing Application Support directory and automatic successful Core Data recovery. The app now creates that directory before initializing on-disk SwiftData. The device build also logged a nonfatal AppIntents SSU archive diagnostic while metadata extraction and the overall build succeeded. Shortcuts discovery/execution must still be verified on the phone.
+
+[Corrected build run 43533704610](https://github.com/lunaraloomofficial-maker/MyFinance/actions/runs/43533704610) completed successfully on 14 November 2026. All seven packaging tests, 16 macOS core tests and 22 simulator tests passed. Xcode reported `TEST SUCCEEDED` and `BUILD SUCCEEDED`, then the corrected script packaged and uploaded `MyFinance-unsigned-IPA-5`.
+
+The IPA was downloaded to ignored `artifacts/MyFinance-unsigned.ipa` and verified locally: ZIP CRC integrity, iPhoneOS platform, minimum iOS 17.0, arm64 executable, absent provisioning/signature files and matching SHA-256 `fa9fbbf6060aa400749a218ac9499c0f78955d3fd693e4bd8204ffaebb6efe8b`. Sideloadly was downloaded from its official HTTPS site, its disk-image checksum verified, installed in Applications and opened with this IPA. No Apple credentials were supplied by the agent, and phone signing/installation remains a user action.
+
+The corrected native log no longer contains the missing Application Support directory recovery diagnostic. The nonfatal AppIntents SSU archive diagnostic remains; metadata extraction and build succeeded, but actual Shortcuts behavior is still a device verification item.
